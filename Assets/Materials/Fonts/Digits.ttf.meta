@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: a19e8319dc8863941869e4cb2903d0fa
+timeCreated: 1468339038
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Digits
+  fontNames:
+  - Digits
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 3d2e2ed63c7a0ed4cb4a7a6d1661e19e, type: 3}
+  - {fileID: 12800000, guid: 460c9ea9569eeac43b77383cd1b56fe4, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
