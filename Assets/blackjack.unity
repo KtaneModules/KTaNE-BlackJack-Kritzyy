@@ -166,7 +166,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 15.3
+  field of view: 13
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -191,7 +191,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 247651228}
   m_LocalRotation: {x: 0.73310435, y: -0, z: -0, w: 0.68011624}
-  m_LocalPosition: {x: -0.0749, y: 1, z: 0.0641}
+  m_LocalPosition: {x: -0.07, y: 1, z: 0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -276,7 +276,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &1276080827
+--- !u!1001 &1544014081
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -313,7 +313,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4924681796606392, guid: e62dde65bdb794c4abd0c45938d9a4dc, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1128930815475672, guid: e62dde65bdb794c4abd0c45938d9a4dc, type: 2}
       propertyPath: m_Name
@@ -322,7 +322,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e62dde65bdb794c4abd0c45938d9a4dc, type: 2}
   m_IsPrefabParent: 0
---- !u!1001 &1411301868
+--- !u!1001 &1984452387
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -359,7 +359,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 439642, guid: 8814ea52310d2614a9feda02ec355ae4, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8814ea52310d2614a9feda02ec355ae4, type: 2}

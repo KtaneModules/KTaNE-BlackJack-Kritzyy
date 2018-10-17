@@ -63,7 +63,7 @@ public class FakeBombInfo : MonoBehaviour
             }
 
             if (portList.Length == 0) portList = "Empty plate";
-            Debug.Log("Added port widget: " + portList);
+            Debug.Log("[TestHarness] Added port widget: " + portList);
         }
 
         public override string GetResult(string key, string data)
@@ -100,7 +100,7 @@ public class FakeBombInfo : MonoBehaviour
             possibleValues.RemoveAt(pos);
             on = Random.value > 0.4f;
 
-            Debug.Log("Added indicator widget: " + val + " is " + (on ? "ON" : "OFF"));
+            Debug.Log("[TestHarness] Added indicator widget: " + val + " is " + (on ? "ON" : "OFF"));
         }
 
         public override string GetResult(string key, string data)
@@ -129,7 +129,7 @@ public class FakeBombInfo : MonoBehaviour
         {
             batt = Random.Range(1, 3);
 
-            Debug.Log("Added battery widget: " + batt);
+            Debug.Log("[TestHarness] Added battery widget: " + batt);
         }
 
         public override string GetResult(string key, string data)
@@ -176,7 +176,7 @@ public class FakeBombInfo : MonoBehaviour
         for (int index = 3; index < 5; ++index) str2 = str2 + possibleCharArray[Random.Range(0, possibleCharArray.Length - 10)];
         serial = str2 + Random.Range(0, 10);
 
-        Debug.Log("Serial: " + serial);
+        Debug.Log("[TestHarness] Serial: " + serial);
     }
 
     float startupTime = .5f;
@@ -317,12 +317,29 @@ public class FakeBombInfo : MonoBehaviour
 
     public void HandleStrike()
     {
+        float MsgGen = Random.Range(1, 5);
         strikes++;
-        Debug.Log(strikes + "/" + numStrikes);
+        Debug.Log("[TestHarness] " + strikes + " out of " + numStrikes + " strikes");
         if (strikes == numStrikes)
         {
             if (Detonate != null) Detonate();
-            Debug.Log("KABOOM!");
+            if (MsgGen == 1)
+            {
+                Debug.Log("[TestHarness] KABOOM!");
+            }
+            else if (MsgGen == 2)
+            {
+                Debug.Log("[TestHarness] Guess that one really... Blew your mind!");
+            }
+            else if (MsgGen == 3)
+            {
+                Debug.Log("[TestHarness] Ya died! Ya died! Ya died! Ya died! Ya died!");
+            }
+            else if (MsgGen == 4)
+            {
+                Debug.Log("[TestHarness] You died! Respawn?");
+                Debug.Log("[TestHarness] (Y,N)");
+            }
         }
     }
 
@@ -331,7 +348,7 @@ public class FakeBombInfo : MonoBehaviour
 
     public void HandleStrike(string reason)
     {
-        Debug.Log("Strike: " + reason);
+        Debug.Log("[TestHarness] Strike: " + reason);
         HandleStrike();
     }
 
@@ -340,9 +357,36 @@ public class FakeBombInfo : MonoBehaviour
 
     public void Solved()
     {
+        float MsgGen = Random.Range(1, 2);
         solved = true;
         if (HandleSolved != null) HandleSolved();
-        Debug.Log("Bomb defused!");
+        if (MsgGen == 1)
+        {
+            Debug.Log("[TestHarness] Bomb defused!");
+        }
+        else if (MsgGen == 2)
+        {
+            Debug.Log("[TestHarness] Bomb has been defused. Counter-Terrorists win.");
+        }
+        else if (MsgGen == 3)
+        {
+            Debug.Log("[TestHarness] GG ez");
+        }
+        else if (MsgGen == 4)
+        {
+            Debug.Log("[TestHarness] GG. What a game!");
+        }
+        Results();
+    }
+
+    public void Results()
+    {
+        Debug.Log("[TestHarness] ---------------------------------------------");
+        Debug.Log("[TestHarness] Bomb Results:");
+        Debug.Log("[TestHarness] ---------------------------------------------");
+        Debug.Log("[TestHarness] Bomb status: Defused.");
+        Debug.LogFormat("[TestHarness] Total strikes: {0}", strikes);
+        Debug.Log("[TestHarness] ---------------------------------------------");
     }
 
     public delegate void LightState(bool state);
@@ -456,7 +500,7 @@ public class TestHarness : MonoBehaviour
 
             fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(modules[i], false));
             modules[i].OnPass = delegate () {
-                Debug.Log("Module Passed");
+                Debug.Log("[TestHarness] Module Passed");
                 fakeInfo.modules.Remove(fakeInfo.modules.First(t => t.Key.Equals(mod)));
                 fakeInfo.modules.Add(new KeyValuePair<KMBombModule, bool>(mod, true));
                 bool allSolved = true;
@@ -472,7 +516,7 @@ public class TestHarness : MonoBehaviour
                 return false;
             };
             modules[i].OnStrike = delegate () {
-                Debug.Log("Strike");
+                Debug.Log("[TestHarness] Strike");
                 fakeInfo.HandleStrike();
                 return false;
             };
@@ -485,12 +529,12 @@ public class TestHarness : MonoBehaviour
 
             needyModules[i].OnPass = delegate ()
             {
-                Debug.Log("Module Passed");
+                Debug.Log("[TestHarness] Module Passed");
                 return false;
             };
             needyModules[i].OnStrike = delegate ()
             {
-                Debug.Log("Strike");
+                Debug.Log("[TestHarness] Strike");
                 fakeInfo.HandleStrike();
                 return false;
             };
@@ -725,7 +769,7 @@ public class TestHarness : MonoBehaviour
                 }
                 else if (currentObject is string)
                 {
-                    Debug.Log("Twitch handler sent: " + currentObject);
+                    Debug.Log("[TestHarness] Twitch handler sent: " + currentObject);
                     yield return currentObject;
                 }
                 else if (currentObject is Quaternion)
@@ -785,7 +829,7 @@ public class TestHarness : MonoBehaviour
         command = GUILayout.TextField(command);
         if ((GUILayout.Button("Simulate Twitch Command") || Event.current.keyCode == KeyCode.Return) && command != "")
         {
-            Debug.Log("Twitch Command: " + command);
+            Debug.Log("[TestHarness] Twitch Command: " + command);
 
             foreach (KMBombModule module in FindObjectsOfType<KMBombModule>())
             {

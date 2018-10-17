@@ -13,108 +13,74 @@
     <div class="page page-bg-01">
         		<div class="page-header">
 			<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-			<span class="page-header-section-title">The Command Prompt</span>
+			<span class="page-header-section-title">Blackjack</span>
 		</div>
         <div class="page-content">
     	    <img src="img/Component.svg" class="diagram">
-            <h2>On the Subject of The Command Prompt</h2>
+            <h2>On the Subject of Blackjack</h2>
             <p class="flavour-text">
-					Old programming never gets old. Or wait... Does it? Technically yes, but... uhm... ehh... Yeah i guess it gets old. But it gets more fun! No wait it doesn't do that either...
+					I should start a Casino one day...
 			</p>
-<li>This module consists of a display with two buttons.</li>
-<li>The display will show both an Action command and a file with extension</li>
-<li>Find the correct response diagram by looking up the pair in diagram A</li>
-<li>Then look for the right instructions in that diagram and respond accordingly with the two buttons "Y" and "N". </li>
-<li>Inputting a false response will give you a strike</li>
-<li>After responding 3 times, an Initial Code will appear. Find the combination below in diagram D, and give the Submission code to the defuser.</li>
+			<ul>
+<li>This module consists of a modified version of Blackjack.</li>
+<li>Only one of your cards is open. The Dealer's hand cannot be seen.</li>
+<li>Determine what your closed card is by looking in Section A.</li>
+<li>If you have 21 before betting, press "Check Blackjack".</li>
+<li>Depending on the closed card, choose the correct bet (Section B) to proceed to the next step.</li>
+<li>Another card will be dealt. Using that card, you can find the order in which cards are being dealt. (Section C)</li>
+<li>Notice: During this modified version of Blackjack, all aces are worth 1, except for your staring card. (Which is 11 or 1)</li>
+<li>Your goal is to get as close to 21, without going over 21.</li>
+<li>The 3 cards after your last card in the list will be the Dealer's hand</li>
+<li>There are 3 ways to win: Get Blackjack (21), Get higher than the Dealer or bankrupt the dealer (Going over 21)</li>
+</ul>
 <p>&nbsp;</p>
-			<table style="height: 165px; border-color: #000000; float: left; width: 446px;">
+<h2><span style="text-decoration: underline;">Section A: Closed Card</span></h2>
+<table>
 <tbody>
 <tr>
-	<td style="border:none"></td>
-	<td style="width: 80px;"><strong>AutoExec</strong></td>
-	<td style="width: 77.6px;"><strong>AutoDet</strong></td>
-	<td style="width: 86.4px;"><strong>EmergExit</strong></td>
-	<td style="width: 96px;"><strong>BoTimer</strong></td>
+<td style="text-align: center;"><strong><em>If your starting card is an Ace...</em></strong><br />
+<ul>
+<li style="text-align: left;">And there is a lit BOB present, then your closed card is the King of Hearts,</li>
+<li style="text-align: left;">Otherwise, if the serial number contains a vowel, then your card is a Five of Diamonds,</li>
+<li style="text-align: left;">Otherwise, if all numbers in the serial number add up to a number higher than 7, the card is a Seven of Spades,</li>
+<li style="text-align: left;">Otherwise, your card is a Two of Clubs.</li>
+</ul>
+</td>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>Initiate:</strong></td>
-<td style="width: 80px; text-align: center;">D1</td>
-<td style="width: 77.6px; text-align: center;">D2</td>
-<td style="width: 86.4px; text-align: center;">D2</td>
-<td style="width: 96px; text-align: center;">D1</td>
+<td style="text-align: center;"><strong><em>If your starting card is a King...</em></strong><br />
+<ul>
+<li style="text-align: left;">And any of the indicators contain a letter in the word "Gambler", your closed card is a Queen of Hearts,</li>
+<li style="text-align: left;">Otherwise, if there is more than one D battery, the closed card is a Nine of Spades,</li>
+<li style="text-align: left;">Otherwise, if a Serial port is present, then the closed card is a Three of Diamonds,</li>
+<li style="text-align: left;">Otherwise, your card is a Four of Clubs.</li>
+</ul>
+</td>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>Execute:</strong></td>
-<td style="width: 80px; text-align: center;">D2</td>
-<td style="width: 77.6px; text-align: center;">D2</td>
-<td style="width: 86.4px; text-align: center;">D1</td>
-<td style="width: 96px; text-align: center;">R1</td>
+<td style="text-align: center;"><strong><em>If your starting card is a Two...</em></strong><br />
+<ul>
+<li style="text-align: left;">And there are more ports than batteries, the closed card is an Ace of Diamonds,</li>
+<li style="text-align: left;">Otherwise, if there is an indicator labeled NSA (Lit or unlit), the card is a Three of Hearts,</li>
+<li style="text-align: left;">Otherwise, if no batteries are present, the closed card will be a Seven of Clubs,</li>
+<li style="text-align: left;">Otherwise, the closed card is a Four of Spades.</li>
+</ul>
+</td>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>Start:</strong></td>
-<td style="width: 80px; text-align: center;">D3</td>
-<td style="width: 77.6px; text-align: center;">D1</td>
-<td style="width: 86.4px; text-align: center;">D2</td>
-<td style="width: 96px; text-align: center;">D1</td>
-</tr>
-<tr>
-<td style="width: 74.4px;"><strong>Abort:</strong></td>
-<td style="width: 80px; text-align: center;">D2</td>
-<td style="width: 77.6px; text-align: center;">{N}</td>
-<td style="width: 86.4px; text-align: center;">D3</td>
-<td style="width: 96px; text-align: center;">D2</td>
-</tr>
-<tr>
-<td style="width: 74.4px;"><strong>End:</strong></td>
-<td style="width: 80px; text-align: center;">D1</td>
-<td style="width: 77.6px; text-align: center;">D1</td>
-<td style="width: 86.4px; text-align: center;">D2</td>
-<td style="width: 96px; text-align: center;">{N}</td>
+<td style="text-align: center;">
+<p><strong><em>If your starting card is a Ten</em></strong><strong><em>...</em></strong></p>
+<ul>
+<li style="text-align: left;">And the serial number contains a letter that is also in the word "Casino", the card is a Five of Clubs</li>
+<li style="text-align: left;">Otherwise, if there is more than 3 AA Batteries, then the card is a Three of Hearts</li>
+<li style="text-align: left;">Otherwise, if a Parallel port is present, the closed card is a Six of Diamonds</li>
+<li style="text-align: left;">Otherwise, the card is an Ace of Spades</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>Diagram A</p>
-<p>&nbsp;</p>
-<p><strong>NOTE: If the combination says {N} never press Y</strong></p>
-<p>&nbsp;</p>
-			<table>
-				<tbody>
-					<tr>
-						<td><strong><em>Diagram 1: Applications</em></strong><br>
-						If the file extension is .exe and the serial number contains
-						a vowel, press Y.<br>
-						Otherwise, if the file extension is .dll and there is a 
-						lit BOB, press N.<br>
-						Otherwise, if the file extension is either .bat or .cmd,
-						press N<br>
-						Otherwise, press Y.</td>
-					</tr>
-					<tr>
-						<td><strong><em>Diagram 2: Pictures</em></strong><br>
-						If the file extention is .jpg and there is at least 2 batteries,
-						press N<br>
-						Otherwise, if the file extension is .png, press Y<br>
-						Otherwise, if there is exactly one battery and one LIT indicator,
-						press Y<br>
-						Otherwise, press Y .</td>
-					</tr>
-					<tr>
-						<td><strong><em>Diagram 3: Sound files</em></strong><br>
-						If the file extension is .mp3 and there are no batteries, press Y<br>
-						Otherwise, if the file extension is .ogg and there are more 
-						lit indicators than unlit indicators. press N (Skip if there are no indicators)<br>
-						Otherwise, if the file extension is .wav, press Y<br>
-						Otherwise, press N</td>
-					</tr>
-				</tbody>
-			</table>
-<p>Diagram B</p>
+<p style="text-align: center;">Page 1 of 2</p>
         </div>
     </div>
 </div>
@@ -122,53 +88,124 @@
     <div class="page page-bg-01">
         		<div class="page-header">
 			<span class="page-header-doc-title">Keep Talking and Nobody Explodes Mod</span>
-			<span class="page-header-section-title">The Command Prompt</span>
+			<span class="page-header-section-title">Blackjack</span>
 		</div>
         <div class="page-content">
-<p>&nbsp;</p>
-			<table style="height: 165px; border-color: #000000; float: left; width: 446px;">
+<h2><span style="text-decoration: underline;">Section B: Card Combinations</span></h2>
+<table class="bluff-or-truth" style="height: 270px;" width="652">
 <tbody>
 <tr>
-<td style="width: 74.4px;">&nbsp;</td>
-<td style="width: 80px;"><strong>_A</strong></td>
-<td style="width: 77.6px;"><strong>_B</strong></td>
-<td style="width: 86.4px;"><strong>_C</strong></td>
-<td style="width: 96px;"><strong>_D</strong></td>
+<th style="width: 441.333px;" colspan="4">Starting Card</th>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>A_</strong></td>
-<td style="width: 80px; text-align: center;">43</td>
-<td style="width: 77.6px; text-align: center;">90</td>
-<td style="width: 86.4px; text-align: center;">05</td>
-<td style="width: 96px; text-align: center;">69</td>
+<th style="width: 101.778px;">Ace Of Spades</th>
+<th style="width: 104.444px;">King Of Diamonds</th>
+<th style="width: 126.667px;">Two Of Hearts</th>
+<th style="width: 91.1111px;">Ten Of Clubs</th>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>B_</strong></td>
-<td style="width: 80px; text-align: center;">10</td>
-<td style="width: 77.6px; text-align: center;">39</td>
-<td style="width: 86.4px; text-align: center;">55</td>
-<td style="width: 96px; text-align: center;">96</td>
+<td style="width: 101.778px;">Bet $250</td>
+<td style="width: 104.444px;">Bet $100</td>
+<td style="width: 126.667px;">Bet $1</td>
+<td style="width: 91.1111px;">Bet $10</td>
+<th class="response" style="width: 174.667px;">Spades</th>
+<th class="response-header" style="width: 30.6667px;" rowspan="6">C<br />l<br />o<br />s<br />e<br />d<br /> <br />C<br />a<br />r<br />d</th>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>C_</strong></td>
-<td style="width: 80px; text-align: center;">87</td>
-<td style="width: 77.6px; text-align: center;">72</td>
-<td style="width: 86.4px; text-align: center;">80</td>
-<td style="width: 96px; text-align: center;">62</td>
+<td style="width: 101.778px;">Bet $100</td>
+<td style="width: 104.444px;">Bet $250</td>
+<td style="width: 126.667px;">Bet $10</td>
+<td style="width: 91.1111px;">Bet $1</td>
+<th class="response" style="width: 174.667px;">Hearts</th>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>D_</strong></td>
-<td style="width: 80px; text-align: center;">45</td>
-<td style="width: 77.6px; text-align: center;">91</td>
-<td style="width: 86.4px; text-align: center;">71</td>
-<td style="width: 96px; text-align: center;">85</td>
+<td style="width: 101.778px;">Bet $10</td>
+<td style="width: 104.444px;">Bet $1</td>
+<td style="width: 126.667px;">Bet $250</td>
+<td style="width: 91.1111px;">Bet $100</td>
+<th class="response" style="width: 174.667px;">Clubs</th>
 </tr>
 <tr>
-<td style="width: 74.4px;"><strong>E_</strong></td>
-<td style="width: 80px; text-align: center;">04</td>
-<td style="width: 77.6px; text-align: center;">14</td>
-<td style="width: 86.4px; text-align: center;">28</td>
-<td style="width: 96px; text-align: center;">36</td>
+<td style="width: 101.778px;">Bet $1</td>
+<td style="width: 104.444px;">Bet $10</td>
+<td style="width: 126.667px;">Bet $100</td>
+<td style="width: 91.1111px;">Bet $250</td>
+<th class="response" style="width: 174.667px;">Diamonds</th>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<h2>Section C: Dealing order</h2>
+<table style="height: 378px;" width="545">
+<tbody>
+<tr style="height: 59px;">
+<td style="width: 535.556px; text-align: center; height: 59px;" colspan="8">
+<h2>Dealing order</h2>
+</td>
+</tr>
+<tr style="height: 38px;">
+<td style="width: 535.556px; text-align: center; height: 38px;" colspan="4">Extra card lower than 4?</td>
+<td style="width: 535.556px; text-align: center; height: 38px;" colspan="4">Extra card 4 or higher?</td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;">Bet $1</td>
+<td style="width: 74.2222px; height: 34px; text-align: center;">Bet $10</td>
+<td style="width: 84.8889px; height: 34px; text-align: center;">Bet $100</td>
+<td style="width: 86.6667px; height: 34px; text-align: center;">Bet $250</td>
+<td style="width: 68px; height: 34px; text-align: center;">Bet $1</td>
+<td style="width: 74.2222px; height: 34px; text-align: center;">Bet $10</td>
+<td style="width: 84.8889px; height: 34px; text-align: center;">Bet $100</td>
+<td style="width: 86.6667px; height: 34px; text-align: center;">Bet $250</td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;"><strong><span style="color: #000000;">2S</span></strong></td>
+<td style="width: 74.2222px; height: 34px; text-align: center;"><strong>6D</strong></td>
+<td style="width: 84.8889px; height: 34px; text-align: center;"><strong>3C</strong></td>
+<td style="width: 86.6667px; height: 34px; text-align: center;"><strong>2D</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>5H</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>qH</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>5D</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>9C</strong></td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;"><strong><span style="color: #000000;">8D</span></strong></td>
+<td style="width: 74.2222px; height: 34px; text-align: center;"><strong>7C</strong></td>
+<td style="width: 84.8889px; height: 34px; text-align: center;"><strong>5H</strong></td>
+<td style="width: 86.6667px; height: 34px; text-align: center;"><strong>jS</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>8S</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>aD</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>qC</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>aS</strong></td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;"><strong><span style="color: #000000;">7H</span></strong></td>
+<td style="width: 74.2222px; height: 34px; text-align: center;"><strong>2C</strong></td>
+<td style="width: 84.8889px; height: 34px; text-align: center;"><strong>qD</strong></td>
+<td style="width: 86.6667px; height: 34px; text-align: center;"><strong>9C</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>5D</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>4C</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>7H</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>3H</strong></td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;"><strong><span style="color: #000000;">9S</span></strong></td>
+<td style="width: 74.2222px; height: 34px; text-align: center;"><strong>8C</strong></td>
+<td style="width: 84.8889px; height: 34px; text-align: center;"><strong>3D</strong></td>
+<td style="width: 86.6667px; height: 34px; text-align: center;"><strong>7H</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>4C</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>kS</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>9C</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>kS</strong></td>
+</tr>
+<tr style="height: 34px;">
+<td style="width: 68px; height: 34px; text-align: center;"><strong><span style="color: #000000;">4D</span></strong></td>
+<td style="width: 74.2222px; height: 34px; text-align: center;"><strong>6S</strong></td>
+<td style="width: 84.8889px; height: 34px; text-align: center;"><strong>10H</strong></td>
+<td style="width: 86.6667px; height: 34px; text-align: center;"><strong>3S</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>jH</strong></td>
+<td style="width: 44.8889px; height: 34px; text-align: center;"><strong>2D</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>5H</strong></td>
+<td style="width: 45.7778px; height: 34px; text-align: center;"><strong>6D</strong></td>
 </tr>
 </tbody>
 </table>
@@ -177,7 +214,7 @@
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>Diagram D</p>
+<p style="text-align: center;">Page 2 of 2</p>
         </div>
     </div>
 </div>

@@ -78,7 +78,7 @@ public class AssetBundler
 
     protected static void BuildModBundle(bool useMSBuild)
     {
-        Debug.LogFormat("Creating \"{0}\" AssetBundle...", BUNDLE_FILENAME);
+        Debug.LogFormat("[AssetBundler] Creating \"{0}\" AssetBundle...", BUNDLE_FILENAME);
 
         if (ModConfig.Instance == null 
             || ModConfig.ID == ""
@@ -149,7 +149,7 @@ public class AssetBundler
 
         if (success)
         {
-            Debug.LogFormat("{0} Build complete! Output: {1}", System.DateTime.Now.ToLocalTime(), bundler.outputFolder);
+            Debug.LogFormat("[AssetBundler] {0} Build complete! Output: {1}", System.DateTime.Now.ToLocalTime(), bundler.outputFolder);
         }
     }
 
@@ -158,7 +158,7 @@ public class AssetBundler
     /// </summary>
     protected void CleanBuildFolder()
     {
-        Debug.LogFormat("Cleaning {0}...", outputFolder);
+        Debug.LogFormat("[AssetBundler] Cleaning {0}...", outputFolder);
 
         if (Directory.Exists(outputFolder))
         {
@@ -173,13 +173,13 @@ public class AssetBundler
     /// </summary>
     void CompileAssemblyWithMSBuild()
     {
-        Debug.Log("Compiling scripts with MSBuild...");
+        Debug.Log("[AssetBundler] Compiling scripts with MSBuild...");
 
         IEnumerable<string> scriptAssetPaths = AssetDatabase.GetAllAssetPaths().Where(assetPath => assetPath.EndsWith(".cs") && IsIncludedAssetPath(assetPath));
 
         if (scriptAssetPaths.Count() == 0)
         {
-            Debug.LogFormat("No scripts found to compile.");
+            Debug.LogFormat("[AssetBundler] No scripts found to compile.");
             return;
         }
 
@@ -214,12 +214,12 @@ public class AssetBundler
     /// </summary>
     void CompileAssemblyWithEditor()
     {
-        Debug.Log("Compiling scripts with EditorUtility.CompileCSharp...");
+        Debug.Log("[AssetBundler] Compiling scripts with EditorUtility.CompileCSharp...");
         IEnumerable<string> scriptAssetPaths = AssetDatabase.GetAllAssetPaths().Where(assetPath => assetPath.EndsWith(".cs") && IsIncludedAssetPath(assetPath));
 
         if (scriptAssetPaths.Count() == 0)
         {
-            Debug.LogFormat("No scripts found to compile.");
+            Debug.LogFormat("[AssetBundler] No scripts found to compile.");
             return;
         }
 
@@ -293,7 +293,7 @@ public class AssetBundler
         foreach (object cm in cmArray)
         {
             string str = (string)messageField.GetValue(cm);
-            Debug.LogFormat("Compiler: {0}", str);
+            Debug.LogFormat("[AssetBundler] Compiler: {0}", str);
         }
 
         if (!File.Exists(outputFilename))
@@ -304,7 +304,7 @@ public class AssetBundler
         //Remove unwanted .mdb file
         File.Delete(Path.Combine(outputFolder, assemblyName + ".dll.mdb"));
 
-        Debug.Log("Script compilation complete.");
+        Debug.Log("[AssetBundler] Script compilation complete.");
     }
 
     /// <summary>
@@ -312,7 +312,7 @@ public class AssetBundler
     /// </summary>
     protected void AdjustMonoScripts()
     {
-        Debug.Log("Adjusting scripts...");
+        Debug.Log("[AssetBundler] Adjusting scripts...");
 
         IEnumerable<string> assetFolderPaths = AssetDatabase.GetAllAssetPaths().Where(path => path.EndsWith(".cs") && IsIncludedAssetPath(path));
 
@@ -335,7 +335,7 @@ public class AssetBundler
     /// </summary>
     protected void RestoreMonoScripts()
     {
-        Debug.Log("Restoring scripts...");
+        Debug.Log("[AssetBundler] Restoring scripts...");
 
         foreach (var path in scriptPathsToRestore)
         {
@@ -368,7 +368,7 @@ public class AssetBundler
         //internal extern void Init(string scriptContents, string className, string nameSpace, string assemblyName, bool isEditorScript);
         MethodInfo dynMethod = script.GetType().GetMethod("Init", BindingFlags.NonPublic | BindingFlags.Instance);
         dynMethod.Invoke(script, new object[] { script.text, script.name, "", assemblyName, false });
-        Debug.LogFormat("Changed {0} assembly to {1}", script.name, assemblyName);
+        Debug.LogFormat("[AssetBundler] Changed {0} assembly to {1}", script.name, assemblyName);
     }
 
     protected void RestoreMonoScriptAssembly(MonoScript script)
@@ -395,7 +395,7 @@ public class AssetBundler
                 {
                     string dest = Path.Combine(outputFolder, Path.GetFileName(assetPath));
 
-                    Debug.LogFormat("Copying {0} to {1}", assetPath, dest);
+                    Debug.LogFormat("[AssetBundler] Copying {0} to {1}", assetPath, dest);
 
                     File.Copy(assetPath, dest);
                 }
@@ -408,7 +408,7 @@ public class AssetBundler
     /// </summary>
     protected void CreateAssetBundle()
     {
-        Debug.Log("Building AssetBundle...");
+        Debug.Log("[AssetBundler] Building AssetBundle...");
 
         //Build all AssetBundles to the TEMP_BUILD_FOLDER
         if (!Directory.Exists(TEMP_BUILD_FOLDER))

@@ -11,10 +11,13 @@ public class BlackJackScript : MonoBehaviour
     public KMSelectable Bet10;
     public KMSelectable Bet100;
     public KMSelectable Bet250;
+    public KMSelectable BlackjackBtn;
 
-    public GameObject Buttons, LockedButtons;
+    public GameObject Buttons, LockedButtons, BjBtn, EmptyBtns;
     public KMSelectable ModuleSelectable;
     public KMBombModule BombModule;
+    List<KMSelectable> ListButtons = new List<KMSelectable>();
+
 
     public KMSelectable HitBtn;
     public KMSelectable StandBtn;
@@ -49,7 +52,7 @@ public class BlackJackScript : MonoBehaviour
 
     public KMBombInfo BombInfo;
 
-    private readonly string TwitchHelpMessage = "Type '!{0} press' followed by one of the buttons. Possible options: Bet1, Bet10, Bet100, Bet250, Hit, Stand.";
+    private readonly string TwitchHelpMessage = "Type '!{0} press' followed by one of the buttons. Possible options: Bet1, bet10, bet100, bet250, hit, stand, check.";
     public KMSelectable[] ProcessTwitchCommand(string Command)
     {
         Command = Command.ToLowerInvariant().Trim();
@@ -77,6 +80,10 @@ public class BlackJackScript : MonoBehaviour
         else if (Command.Equals("press stand"))
         {
             return new[] { StandBtn };
+        }
+        else if (Command.Equals("press check"))
+        {
+            return new[] { BlackjackBtn };
         }
         return null;
     }
@@ -109,6 +116,7 @@ public class BlackJackScript : MonoBehaviour
     bool Exception1 = false;
     bool Exception2 = false;
 
+    bool DealCard = true;
     bool isCard1Dealt = false;
     bool isCard2Dealt = false;
 
@@ -123,17 +131,24 @@ public class BlackJackScript : MonoBehaviour
         Bet250.OnInteract += Betting250;
         HitBtn.OnInteract += HitCard;
         StandBtn.OnInteract += Stand;
+        BlackjackBtn.OnInteract += BlackjackCheck;
         Shuffle.PlaySoundAtTransform("Shuffle", transform);
     }
 
     void Start()
     {
-        List<KMSelectable> ListButtons = new List<KMSelectable>();
         foreach (Transform child in Buttons.transform)
         {
             GameObject Lol = child.gameObject;
             ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
         }
+        foreach (Transform child in BjBtn.transform)
+        {
+            GameObject Lol = child.gameObject;
+            ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+        }
+        ModuleSelectable.Children = ListButtons.ToArray();
+        ModuleSelectable.UpdateChildren();
         StartingCardGen = 0;
         Suit = 0;
         DealtCard = 0;
@@ -212,7 +227,8 @@ public class BlackJackScript : MonoBehaviour
                 ClosedCard = "KingOfHearts";
                 totalSum = totalSum + 10;
                 CorrectBet = 100;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the King Of Hearts", moduleId);
+                ClosedCardValue = 10;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the King Of Hearts with a value of {1}", moduleId, ClosedCardValue);
                 BlackjackAtStart = true;
             }
             else if (BombInfo.GetSerialNumberLetters().Any("AEIOU".Contains))
@@ -220,20 +236,23 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 5;
                 ClosedCard = "FiveOfDiamonds";
                 CorrectBet = 1;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Five Of Diamonds", moduleId);
+                ClosedCardValue = 5;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Five Of Diamonds with a value of {1}", moduleId, ClosedCardValue);
             }
             else if (BombInfo.GetSerialNumberNumbers().Sum() > 7)
             {
                 totalSum = totalSum + 7;
                 CorrectBet = 250;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Seven Of Spades", moduleId);
+                ClosedCardValue = 7;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Seven Of Spades with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "SevenOfSpades";
             }
             else
             {
                 totalSum = totalSum + 2;
                 CorrectBet = 10;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Two Of Clubs", moduleId);
+                ClosedCardValue = 2;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Two Of Clubs with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "TwoOfClubs";
             }
         } //Ace Of Spades
@@ -244,7 +263,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 10;
                 CorrectBet = 250;
                 ClosedCardValue = 10;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Queen Of Hearts", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Queen Of Hearts with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "QueenOfHearts";
             }
             else if (BombInfo.GetBatteryCount(Battery.D) > 1)
@@ -252,7 +271,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 9;
                 CorrectBet = 100;
                 ClosedCardValue = 9;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Nine Of Spades", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Nine Of Spades with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "NineOfSpades";
             }
             else if (BombInfo.IsPortPresent(Port.Serial))
@@ -260,7 +279,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 3;
                 CorrectBet = 10;
                 ClosedCardValue = 3;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Diamonds", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Diamonds with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "ThreeOfDiamonds";
             }
             else
@@ -268,7 +287,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 4;
                 CorrectBet = 1;
                 ClosedCardValue = 4;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Four Of Clubs", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Four Of Clubs with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "FourOfClubs";
             }
         } //King Of Diamonds
@@ -280,14 +299,14 @@ public class BlackJackScript : MonoBehaviour
                 ClosedCardValue = 10;
                 ClosedCard = "AceOfDiamonds";
                 CorrectBet = 100;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Diamonds", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Diamonds with a value of {1}", moduleId, ClosedCardValue);
             }
             else if (BombInfo.IsIndicatorPresent(Indicator.NSA))
             {
                 totalSum = totalSum + 3;
                 CorrectBet = 10;
                 ClosedCardValue = 3;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Hearts", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Hearts with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "ThreeOfHearts";
             }
             else if (BombInfo.GetBatteryCount() == 0)
@@ -295,7 +314,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 7;
                 CorrectBet = 250;
                 ClosedCardValue = 7;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Seven Of Clubs", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Seven Of Club with a value of {1}s", moduleId, ClosedCardValue);
                 ClosedCard = "SevenOfClubs";
             }
             else
@@ -303,7 +322,7 @@ public class BlackJackScript : MonoBehaviour
                 totalSum = totalSum + 4;
                 CorrectBet = 1;
                 ClosedCardValue = 4;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Four Of Spades", moduleId);
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Four Of Spades with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "FourOfSpades";
             }
         } //Two Of Diamonds
@@ -313,28 +332,32 @@ public class BlackJackScript : MonoBehaviour
             {
                 totalSum = totalSum + 5;
                 CorrectBet = 100;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Five Of Clubs", moduleId);
+                ClosedCardValue = 5;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Five Of Clubs with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "FiveOfClubs";
             }
             else if (BombInfo.GetBatteryCount(Battery.AA) > 3)
             {
                 totalSum = totalSum + 3;
                 CorrectBet = 1;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Hearts", moduleId);
+                ClosedCardValue = 3;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Three Of Hearts with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "ThreeOfHearts";
             }
             else if (BombInfo.IsPortPresent(Port.Parallel))
             {
                 totalSum = totalSum + 6;
                 CorrectBet = 250;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Six Of Diamonds", moduleId);
+                ClosedCardValue = 6;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Six Of Diamonds with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "SixOfDiamonds";
             }
             else
             {
                 totalSum = totalSum + 1;
                 CorrectBet = 10;
-                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Spades", moduleId);
+                ClosedCardValue = 1;
+                Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Spades with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "AceOfSpades";
                 BlackjackAtStart = true;
             }
@@ -681,13 +704,13 @@ public class BlackJackScript : MonoBehaviour
             totalSum = totalSum - 10;
             Debug.LogFormat("[Blackjack #{0}] One of the aces in your hand was used.", moduleId);
         }
-        StartCoroutine("CheckForAceContinuously");
-        TotalSumDebug();
+        TotalSumLog();
     }     
-    void TotalSumDebug()
+    void TotalSumLog()
     {
         Debug.LogFormat("[Blackjack #{0}] The total sum of cards without hitting is {1}", moduleId, totalSum);
     }
+
     IEnumerator HitOrStand()
     {
         for (int i = 0; i < 3; i++)
@@ -714,22 +737,6 @@ public class BlackJackScript : MonoBehaviour
         }
     }
 
-    IEnumerator CheckForAceContinuously()
-    {
-        for (int i = 0; i < 999999999; i++)
-        {
-            if (totalSum > 21 && Aces > 0)
-            {
-                Debug.LogFormat("[Blackjack #{0}] One of the aces in your hand was used.", moduleId);
-                Debug.LogFormat("[Blackjack #{0}] The total sum of cards after your ace is {1}", moduleId, totalSum);
-                Aces--;
-                totalSum = totalSum - 10;
-                BlackjackMessage = true;
-            }
-            yield return new WaitForSecondsRealtime(1);
-        }
-    }
-
     IEnumerator Restart()
     {
         for (int i = 0; i < 6; i++)
@@ -737,11 +744,19 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 0)
             {
+                ListButtons.Clear();
+                /*foreach (Transform child in EmptyBtns.transform)
+                {
+                    GameObject Lol = child.gameObject;
+                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+                } */
+                ModuleSelectable.Children = ListButtons.ToArray();
+                ModuleSelectable.UpdateChildren();
                 MainCard.material.mainTexture = mainCard;
+                CardClosedRender.material.mainTexture = mainCard;
                 ExtraCard.material.mainTexture = mainCard;
                 HitCard1.material.mainTexture = mainCard;
                 HitCard2.material.mainTexture = mainCard;
-                Deactivated();
                 Response.text = "Player busted!";
             }
             else if (timer == 1)
@@ -761,10 +776,6 @@ public class BlackJackScript : MonoBehaviour
                 HittingAllowed = false;
                 StandingAllowed = false;
                 Start();
-            }
-            else if (timer == 4)
-            {
-                Awake();
             }
             else if (timer == 6)
             {
@@ -787,7 +798,7 @@ public class BlackJackScript : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogFormat("[Blackjack #{0}] Busted!", moduleId, totalSum);
+                    Debug.LogFormat("[Blackjack #{0}] Busted!", moduleId);
                     Over21();
                     StopCoroutine("CheckForOver21");
                 }
@@ -796,7 +807,22 @@ public class BlackJackScript : MonoBehaviour
         }
     }
 
-
+    IEnumerator InputDelay()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            timer = i;
+            if (timer == 2)
+            {
+                if (isCard2Dealt == false)
+                {
+                    Debug.LogFormat("[Blackjack #{0}] Card can now be dealt again!", moduleId);
+                }
+                DealCard = true;
+            }
+            yield return new WaitForSecondsRealtime(1);
+        }
+    }
 
     protected bool Betting1()
     {
@@ -886,7 +912,7 @@ public class BlackJackScript : MonoBehaviour
             BetWorth.text = "$100";
             HitText.color = Color.black;
             StandText.color = Color.black;
-            Shuffle.PlaySoundAtTransform("DealCard1", transform);
+            DealCard1.PlaySoundAtTransform("DealCard1", transform);
             BettingCoin.material.mainTexture = BetCoin100;
             UpdateSelectable();
             DealingCardExceptions();
@@ -921,10 +947,11 @@ public class BlackJackScript : MonoBehaviour
             BetWorth.text = "$250";
             HitText.color = Color.black;
             StandText.color = Color.black;
-            Shuffle.PlaySoundAtTransform("DealCard1", transform);
+            DealCard1.PlaySoundAtTransform("DealCard1", transform);
             BettingCoin.material.mainTexture = BetCoin250;
             DealingCardExceptions();
             UpdateSelectable();
+
         }
         else if (BettingComplete == true)
         {
@@ -938,13 +965,55 @@ public class BlackJackScript : MonoBehaviour
         return false;
     }
 
+    protected bool BlackjackCheck()
+    {
+        GetComponent<KMSelectable>().AddInteractionPunch();
+        GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+        Debug.LogFormat("[Blackjack #{0}] You checked if you have Blackjack", moduleId);
+        Debug.LogFormat("[Blackjack #{0}] The total sum of cards is {1}", moduleId, totalSum);
+        if (totalSum == 21)
+        {
+            GetComponent<KMBombModule>().HandlePass();
+            Debug.LogFormat("[Blackjack #{0}] You have blackjack! Module passed.", moduleId);
+            GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
+            ResultWin();
+            Solved = true;
+        }
+        else
+        {
+            Bet1.OnInteract += Empty;
+            Bet10.OnInteract += Empty;
+            Bet100.OnInteract += Empty;
+            Bet250.OnInteract += Empty;
+            HitBtn.OnInteract += Empty;
+            StandBtn.OnInteract += Empty;
+            BlackjackBtn.OnInteract += Empty;
+            GetComponent<KMBombModule>().HandleStrike();
+            ListButtons.Clear();
+            foreach (Transform child in Buttons.transform)
+            {
+                GameObject Lol = child.gameObject;
+                ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+            }
+            ModuleSelectable.Children = ListButtons.ToArray();
+            ModuleSelectable.UpdateChildren();
+            Debug.LogFormat("[Blackjack #{0}] You don't have blackjack! Strike handed.", moduleId);
+            StartCoroutine("ResultNoBj");
+            HittingAllowed = false;
+            StandingAllowed = false;
+            Start();
+        }
+        return false;
+    }
+
+
     protected bool HitCard()
     {
         if (Solved == true)
         {
             return false;
         }
-        if (HittingAllowed == true)
+        if (HittingAllowed == true && DealCard == true)
         {
             if (DealingOrder == 1)
             {
@@ -954,7 +1023,9 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 2;
                     isCard1Dealt = true;
                     Hits = 1;
-                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+                    return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
                 {
@@ -963,6 +1034,8 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 8;
                     isCard2Dealt = true;
                     Hits = 2;
+                    DealCard = false;
+                    return false;
                 }
                 else
                 {
@@ -977,6 +1050,8 @@ public class BlackJackScript : MonoBehaviour
                     isCard1Dealt = true;
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+                    return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
                 {
@@ -985,6 +1060,8 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 7;
                     isCard2Dealt = true;
                     Hits = 2;
+                    DealCard = false;
+                    return false;
                 }
                 else
                 {
@@ -999,6 +1076,9 @@ public class BlackJackScript : MonoBehaviour
                     isCard1Dealt = true;
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+                    return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
                 {
@@ -1007,6 +1087,9 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 5;
                     isCard2Dealt = true;
                     Hits = 2;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+                    return false;
                 }
                 else
                 {
@@ -1021,6 +1104,8 @@ public class BlackJackScript : MonoBehaviour
                     isCard1Dealt = true;
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+                    return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
                 {
@@ -1029,110 +1114,15 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 10;
                     isCard2Dealt = false;
                     Hits = 2;
+                    DealCard = false;
+                    return false;
 
                 }
                 else
                 {
                 }
             }
-            else if (DealingOrder == 5)
-            {
-                if (isCard1Dealt == false)
-                {
-                    HitCard1.material.mainTexture = FiveOfHearts;
-                    totalSum = totalSum + 5;
-                    isCard1Dealt = true;
-                    Hits = 1;
-                    DealCard2.PlaySoundAtTransform("DealCard2", transform);
-                }
-                else if (isCard1Dealt == true && isCard2Dealt == false)
-                {
-                    DealCard3.PlaySoundAtTransform("DealCard3", transform);
-                    HitCard2.material.mainTexture = EightOfSpades;
-                    totalSum = totalSum + 8;
-                    isCard2Dealt = true;
-                    Hits = 2;
-                }
-                else
-                {
-                }
-            }
-            else if (DealingOrder == 6)
-            {
-                if (isCard1Dealt == false)
-                {
-                    HitCard1.material.mainTexture = QueenOfHearts;
-                    totalSum = totalSum + 10;
-                    Hits = 1;
-                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                    isCard1Dealt = true;
-                }
-                else if (isCard1Dealt == true && isCard2Dealt == false)
-                {
-                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                    HitCard2.material.mainTexture = AceOfDiamonds;
-                    totalSum = totalSum + 1;
-                    Hits = 2;
-                    isCard2Dealt = true;
-                }
-                else
-                {
-                }
-            }
-            else if (DealingOrder == 7)
-            {
-                if (isCard1Dealt == false)
-                {
-                    HitCard1.material.mainTexture = FiveOfDiamonds;
-                    totalSum = totalSum + 5;
-                    Hits = 1;
-                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                    isCard1Dealt = true;
-                }
-                else if (isCard1Dealt == true && isCard2Dealt == false)
-                {
-                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                    HitCard2.material.mainTexture = QueenOfClubs;
-                    totalSum = totalSum + 10;
-                    isCard2Dealt = true;
-                    Hits = 2;
-                }
-                else
-                {
-                }
-            }
-            else if (DealingOrder == 8)
-            {
-                if (isCard1Dealt == false)
-                {
-                    HitCard1.material.mainTexture = NineOfClubs;
-                    totalSum = totalSum + 9;
-                    Hits = 1;
-                    isCard1Dealt = true;
-                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                }
-                else if (isCard1Dealt == true && isCard2Dealt == false)
-                {
-                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                    HitCard2.material.mainTexture = AceOfSpades;
-                    totalSum = totalSum + 1;
-                    isCard2Dealt = true;
-                    Hits = 2;
-                }
-                else
-                {
-                }
-            }
 
-            if (totalSum > 21)
-            {
-                if (Aces == 1)
-                {
-                    Aces = 0;
-                    totalSum = totalSum - 10;
-                }
-            }
-            Debug.LogFormat("[Blackjack #{0}] The total sum of cards after hit {1} is {2}", moduleId, Hits, totalSum);
         }
         else
         {
@@ -1140,7 +1130,143 @@ public class BlackJackScript : MonoBehaviour
         
         GetComponent<KMSelectable>().AddInteractionPunch();
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
+        HitCardCont();
         return false;
+    }
+
+    void HitCardCont() //Script somehow won't read the entire thing if it's too long. Oh well.
+    {
+        if (DealingOrder == 5)
+        {
+            if (isCard1Dealt == false)
+            {
+                HitCard1.material.mainTexture = FiveOfHearts;
+                totalSum = totalSum + 5;
+                isCard1Dealt = true;
+                Hits = 1;
+                DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else if (isCard1Dealt == true && isCard2Dealt == false)
+            {
+                DealCard3.PlaySoundAtTransform("DealCard3", transform);
+                HitCard2.material.mainTexture = EightOfSpades;
+                totalSum = totalSum + 8;
+                isCard2Dealt = true;
+                Hits = 2;
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else
+            {
+            }
+        }
+        else if (DealingOrder == 6)
+        {
+            if (isCard1Dealt == false)
+            {
+                HitCard1.material.mainTexture = QueenOfHearts;
+                totalSum = totalSum + 10;
+                Hits = 1;
+                Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                isCard1Dealt = true;
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else if (isCard1Dealt == true && isCard2Dealt == false)
+            {
+                Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                HitCard2.material.mainTexture = AceOfDiamonds;
+                totalSum = totalSum + 1;
+                Hits = 2;
+                isCard2Dealt = true;
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else
+            {
+            }
+        }
+        else if (DealingOrder == 7)
+        {
+            if (isCard1Dealt == false)
+            {
+                HitCard1.material.mainTexture = FiveOfDiamonds;
+                totalSum = totalSum + 5;
+                Hits = 1;
+                Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                isCard1Dealt = true;
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else if (isCard1Dealt == true && isCard2Dealt == false)
+            {
+                Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                HitCard2.material.mainTexture = QueenOfClubs;
+                totalSum = totalSum + 10;
+                isCard2Dealt = true;
+                Hits = 2;
+                DealCard = false;
+                StartCoroutine("InputDelay");
+                
+            }
+            else
+            {
+            }
+        }
+        else if (DealingOrder == 8)
+        {
+            if (isCard1Dealt == false)
+            {
+                HitCard1.material.mainTexture = NineOfClubs;
+                totalSum = totalSum + 9;
+                Hits = 1;
+                isCard1Dealt = true;
+                Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                DealCard = false;
+                
+            }
+            else if (isCard1Dealt == true && isCard2Dealt == false)
+            {
+                Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                HitCard2.material.mainTexture = AceOfSpades;
+                totalSum = totalSum + 1;
+                isCard2Dealt = true;
+                Hits = 2;
+                DealCard = false;
+                
+            }
+            else
+            {
+            }
+        }
+        if (totalSum > 21)
+        {
+            if (Aces == 1)
+            {
+                Aces = 0;
+                totalSum = totalSum - 10;
+                LogHitAce();
+            }
+        }
+        LogHit();
+        StartCoroutine("InputDelay");
+    }
+
+    void LogHit()
+    {
+        Debug.LogFormat("[Blackjack #{0}] The total sum of cards after hit {1} is {2}", moduleId, Hits, totalSum);
+    }
+
+    void LogHitAce()
+    {
+        Debug.LogFormat("[Blackjack #{0}] The total sum of cards after hit {1} and using 1 ace is {2}", moduleId, Hits, totalSum);
     }
 
     protected bool Stand()
@@ -1149,7 +1275,8 @@ public class BlackJackScript : MonoBehaviour
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         if (BlackjackAtStart == true)
         {
-            Debug.LogFormat("[Blackjack #{0}] Your hand is Blackjack! Module passed.", moduleId, totalSum);
+            Debug.LogFormat("[Blackjack #{0}] You have blackjack! Module passed.", moduleId, totalSum);
+            GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
             GetComponent<KMBombModule>().HandlePass();
             Solved = true;
             ResultBlackjack();
@@ -1186,7 +1313,7 @@ public class BlackJackScript : MonoBehaviour
                 DealerCard1.material.mainTexture = SevenOfHearts;
                 DealerCard2.material.mainTexture = NineOfSpades;
                 DealerCard3.material.mainTexture = FourOfDiamonds;
-                totalSumDealer = 17;
+                totalSumDealer = 20;
             }
         }
         else if (DealingOrder == 2)
@@ -1306,7 +1433,7 @@ public class BlackJackScript : MonoBehaviour
                 DealerCard2.material.mainTexture = FourOfClubs;
                 DealerCard3.material.mainTexture = KingOfSpades;
                 DealerCard3.material.mainTexture = TwoOfDiamonds;
-                totalSumDealer = 14;
+                totalSumDealer = 16;
             }
         }
         else if (DealingOrder == 7)
@@ -1369,6 +1496,7 @@ public class BlackJackScript : MonoBehaviour
         if (totalSumDealer > 21)
         {
             GetComponent<KMBombModule>().HandlePass();
+            GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
             Solved = true;
             ResultWin();
             Debug.LogFormat("[Blackjack #{0}] Dealer busted! Module passed.", moduleId, totalSum);
@@ -1443,8 +1571,9 @@ public class BlackJackScript : MonoBehaviour
         }
         if (totalSum == 21)
         {
-            Debug.LogFormat("[Blackjack #{0}] Your hand has Blackjack! Module passed.", moduleId, totalSum);
+            Debug.LogFormat("[Blackjack #{0}] You have Blackjack! Module passed.", moduleId, totalSum);
             GetComponent<KMBombModule>().HandlePass();
+            GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
             Solved = true;
             ResultBlackjack();
 
@@ -1456,6 +1585,7 @@ public class BlackJackScript : MonoBehaviour
             {
                 Debug.LogFormat("[Blackjack #{0}] Your hand is worth more! Module passed.", moduleId, totalSum);
                 GetComponent<KMBombModule>().HandlePass();
+                GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
                 ResultWin();
                 Solved = true;
             }
@@ -1472,6 +1602,7 @@ public class BlackJackScript : MonoBehaviour
             {
                 Debug.LogFormat("[Blackjack #{0}] Push, Tie game! Module passed.", moduleId, totalSum);
                 GetComponent<KMBombModule>().HandlePass();
+                GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.CorrectChime, transform);
                 ResultWin();
                 Solved = true;
             }
@@ -1483,7 +1614,6 @@ public class BlackJackScript : MonoBehaviour
 
     void UpdateSelectable()
     {
-        List<KMSelectable> ListButtons = new List<KMSelectable>();
         foreach (Transform child in Buttons.transform)
         {
             GameObject Lol = child.gameObject;
@@ -1496,35 +1626,52 @@ public class BlackJackScript : MonoBehaviour
         }
         HitBtn.OnInteract += HitCard;
         StandBtn.OnInteract += Stand;
+
         ModuleSelectable.Children = ListButtons.ToArray();
         ModuleSelectable.UpdateChildren();
     }
 
+    void RestartSelectable()
+    {
+        ListButtons.Remove(HitBtn);
+        ListButtons.Remove(StandBtn);
+
+        ModuleSelectable.Children = ListButtons.ToArray();
+        ModuleSelectable.UpdateChildren();
+        return;
+    }
+
     void Over21()
     {
-        List<KMSelectable> ListButtons = new List<KMSelectable>();
         GetComponent<KMBombModule>().HandleStrike();
         StartCoroutine("Restart");
         BlackjackMessage = false;
         HittingAllowed = false;
         StandingAllowed = false;
-        ListButtons.Clear();
+
+        RestartSelectable();
+
+        HitText.color = Color.grey;
+        StandText.color = Color.grey;
         HingeHit.gameObject.transform.Rotate(0, 0, 270);
         HingeStand.gameObject.transform.Rotate(0, 0, 270);
     }
 
     void Deactivated()
     {
-        Bet1.OnInteract += Empty;
-        Bet10.OnInteract += Empty;
-        Bet100.OnInteract += Empty;
-        Bet250.OnInteract += Empty;
-        HitBtn.OnInteract += Empty;
-        StandBtn.OnInteract += Empty;
+        Bet1.OnInteract = Empty;
+        Bet10.OnInteract = Empty;
+        Bet100.OnInteract = Empty;
+        Bet250.OnInteract = Empty;
+        HitBtn.OnInteract = Empty;
+        StandBtn.OnInteract = Empty;
+        BlackjackBtn.OnInteract = Empty;
     }
 
     protected bool Empty()
     {
+        GetComponent<KMSelectable>().AddInteractionPunch();
+        GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
         return false;
     }
 
@@ -1620,8 +1767,15 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 0)
             {
+                ListButtons.Clear();
                 ShowClosedCard();
-                Deactivated();
+                /*foreach (Transform child in EmptyBtns.transform)
+                {
+                    GameObject Lol = child.gameObject;
+                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+                } */
+                ModuleSelectable.Children = ListButtons.ToArray();
+                ModuleSelectable.UpdateChildren();
                 HingeHit.gameObject.transform.Rotate(0, 0, 270);
                 HingeStand.gameObject.transform.Rotate(0, 0, 270);
                 Response.text = "Dealer won!";
@@ -1640,25 +1794,85 @@ public class BlackJackScript : MonoBehaviour
             }
             if (timer == 4)
             {
-                List<KMSelectable> ListButtons = new List<KMSelectable>();
-                ListButtons.Clear();
                 DealingRules();
                 DealerCard1.material.mainTexture = mainCard;
                 DealerCard2.material.mainTexture = mainCard;
                 DealerCard3.material.mainTexture = mainCard;
+                MainCard.material.mainTexture = mainCard;
+                CardClosedRender.material.mainTexture = mainCard;
+                ExtraCard.material.mainTexture = mainCard;
+                HitCard1.material.mainTexture = mainCard;
+                HitCard2.material.mainTexture = mainCard;
+                HittingAllowed = false;
+                StandingAllowed = false;
+                Response.text = "Betting...";
+                Start();
+            }
+            yield return new WaitForSecondsRealtime(1);
+        }
+    }
+
+    IEnumerator ResultNoBj()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            if (BettingComplete == true)
+            {
+                HingeHit.gameObject.transform.Rotate(0, 0, 270);
+                HingeStand.gameObject.transform.Rotate(0, 0, 270);
+            }
+            Response.text = "Uh oh...";
+            timer = i;
+            if (timer == 0)
+            {
+                ListButtons.Clear();
+                /*foreach (Transform child in EmptyBtns.transform)
+                {
+                    GameObject Lol = child.gameObject;
+                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+                } */
+                ModuleSelectable.Children = ListButtons.ToArray();
+                ModuleSelectable.UpdateChildren();
+                ShowClosedCard();
+            }
+            if (timer == 1)
+            {
+                Response.text = "No Blackjack!";
+            }
+            if (timer == 2)
+            {
+                Response.text = "Restarting...";
+            }
+            if (timer == 3)
+            {
+                Response.text = "No Blackjack!";
+            }
+            if (timer == 4)
+            {
+                DealingRules();
+                DealerCard1.material.mainTexture = mainCard;
+                DealerCard2.material.mainTexture = mainCard;
+                DealerCard3.material.mainTexture = mainCard;
+                MainCard.material.mainTexture = mainCard;
+                CardClosedRender.material.mainTexture = mainCard;
+                ExtraCard.material.mainTexture = mainCard;
+                HitCard1.material.mainTexture = mainCard;
+                HitCard2.material.mainTexture = mainCard;
                 HittingAllowed = false;
                 StandingAllowed = false;
                 Response.text = "Betting...";
             }
             if (timer == 4)
             {
-                MainCard.material.mainTexture = mainCard;
-                CardClosedRender.material.mainTexture = mainCard;
-                ExtraCard.material.mainTexture = mainCard;
-                HitCard1.material.mainTexture = mainCard;
-                HitCard2.material.mainTexture = mainCard;
+                foreach (Transform child in BjBtn.transform)
+                {
+                    GameObject Lol = child.gameObject;
+                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
+                }
+                ModuleSelectable.Children = ListButtons.ToArray();
+                ModuleSelectable.UpdateChildren();
+                Start();
             }
-
             yield return new WaitForSecondsRealtime(1);
         }
     }
