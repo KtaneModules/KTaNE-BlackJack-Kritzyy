@@ -52,36 +52,36 @@ public class BlackJackScript : MonoBehaviour
 
     public KMBombInfo BombInfo;
 
-    private readonly string TwitchHelpMessage = "Type '!{0} press' followed by one of the buttons. Possible options: Bet1, bet10, bet100, bet250, hit, stand, check.";
+    private readonly string TwitchHelpMessage = "Type '!{0} bet 10' to bet $10. Type '!{0} hit' to get another card and '!{0} stand'. To check for blackjack at the start, type '!{0} check'";
     public KMSelectable[] ProcessTwitchCommand(string Command)
     {
         Command = Command.ToLowerInvariant().Trim();
 
-        if (Command.Equals("press bet1"))
+        if (Command.Equals("bet 1"))
         {
             return new[] { Bet1 };
         }
-        else if (Command.Equals("press bet10"))
+        else if (Command.Equals("bet 10"))
         {
             return new[] { Bet10 };
         }
-        else if (Command.Equals("press bet100"))
+        else if (Command.Equals("bet 100"))
         {
             return new[] { Bet100 };
         }
-        else if (Command.Equals("press bet250"))
+        else if (Command.Equals("bet 250"))
         {
             return new[] { Bet250 };
         }
-        else if (Command.Equals("press hit"))
+        else if (Command.Equals("hit"))
         {
             return new[] { HitBtn };
         }
-        else if (Command.Equals("press stand"))
+        else if (Command.Equals("stand"))
         {
             return new[] { StandBtn };
         }
-        else if (Command.Equals("press check"))
+        else if (Command.Equals("check"))
         {
             return new[] { BlackjackBtn };
         }
@@ -131,12 +131,18 @@ public class BlackJackScript : MonoBehaviour
         Bet250.OnInteract += Betting250;
         HitBtn.OnInteract += HitCard;
         StandBtn.OnInteract += Stand;
-        BlackjackBtn.OnInteract += BlackjackCheck;
         Shuffle.PlaySoundAtTransform("Shuffle", transform);
     }
 
     void Start()
     {
+        Bet1.OnInteract = Betting1;
+        Bet10.OnInteract = Betting10;
+        Bet100.OnInteract = Betting100;
+        Bet250.OnInteract = Betting250;
+        HitBtn.OnInteract = HitCard;
+        StandBtn.OnInteract = Stand;
+        BlackjackBtn.OnInteract += BlackjackCheck;
         foreach (Transform child in Buttons.transform)
         {
             GameObject Lol = child.gameObject;
@@ -295,8 +301,8 @@ public class BlackJackScript : MonoBehaviour
         {
             if (BombInfo.GetPortCount() > BombInfo.GetBatteryCount())
             {
-                totalSum = totalSum + 10;
-                ClosedCardValue = 10;
+                totalSum = totalSum + 1;
+                ClosedCardValue = 1;
                 ClosedCard = "AceOfDiamonds";
                 CorrectBet = 100;
                 Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Diamonds with a value of {1}", moduleId, ClosedCardValue);
@@ -718,6 +724,7 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 1)
             {
+                UpdateSelectable();
                 Response.text = "Hit or Stand?";
             }
             yield return new WaitForSecondsRealtime(1);
@@ -834,7 +841,11 @@ public class BlackJackScript : MonoBehaviour
             }
             HingeHit.gameObject.transform.Rotate(0, 0, 90);
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
+            BlackjackBtn.OnInteract = Empty;
             Response.text = "Betting Complete";
+            ListButtons.Clear();
+            ModuleSelectable.Children = ListButtons.ToArray();
+            ModuleSelectable.UpdateChildren();
             StartCoroutine("HitOrStand");
             HittingAllowed = true;
             StandingAllowed = true;
@@ -844,7 +855,6 @@ public class BlackJackScript : MonoBehaviour
             DealCard1.PlaySoundAtTransform("DealCard1", transform);
             BettingCoin.material.mainTexture = BetCoin1;
             BetWorth.text = "$1";
-            UpdateSelectable();
             DealingCardExceptions();
         }
         else if (BettingComplete == true)
@@ -870,6 +880,10 @@ public class BlackJackScript : MonoBehaviour
             HingeHit.gameObject.transform.Rotate(0, 0, 90);
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
+            BlackjackBtn.OnInteract = Empty;
+            ListButtons.Clear();
+            ModuleSelectable.Children = ListButtons.ToArray();
+            ModuleSelectable.UpdateChildren();
             StartCoroutine("HitOrStand");
             HittingAllowed = true;
             StandingAllowed = true;
@@ -880,7 +894,6 @@ public class BlackJackScript : MonoBehaviour
             BettingCoin.material.mainTexture = BetCoin10;
             BetWorth.text = "$10";
             DealingCardExceptions();
-            UpdateSelectable();
         }
         else if (BettingComplete == true)
         {
@@ -905,6 +918,10 @@ public class BlackJackScript : MonoBehaviour
             HingeHit.gameObject.transform.Rotate(0, 0, 90);
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
+            BlackjackBtn.OnInteract = Empty;
+            ListButtons.Clear();
+            ModuleSelectable.Children = ListButtons.ToArray();
+            ModuleSelectable.UpdateChildren();
             StartCoroutine("HitOrStand");
             BettingComplete = true;
             HittingAllowed = true;
@@ -914,7 +931,6 @@ public class BlackJackScript : MonoBehaviour
             StandText.color = Color.black;
             DealCard1.PlaySoundAtTransform("DealCard1", transform);
             BettingCoin.material.mainTexture = BetCoin100;
-            UpdateSelectable();
             DealingCardExceptions();
         }
         else if (BettingComplete == true)
@@ -940,6 +956,10 @@ public class BlackJackScript : MonoBehaviour
             HingeHit.gameObject.transform.Rotate(0, 0, 90);
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
+            BlackjackBtn.OnInteract = Empty;
+            ListButtons.Clear();
+            ModuleSelectable.Children = ListButtons.ToArray();
+            ModuleSelectable.UpdateChildren();
             StartCoroutine("HitOrStand");
             BettingComplete = true;
             HittingAllowed = true;
@@ -950,8 +970,6 @@ public class BlackJackScript : MonoBehaviour
             DealCard1.PlaySoundAtTransform("DealCard1", transform);
             BettingCoin.material.mainTexture = BetCoin250;
             DealingCardExceptions();
-            UpdateSelectable();
-
         }
         else if (BettingComplete == true)
         {
@@ -981,13 +999,13 @@ public class BlackJackScript : MonoBehaviour
         }
         else
         {
-            Bet1.OnInteract += Empty;
-            Bet10.OnInteract += Empty;
-            Bet100.OnInteract += Empty;
-            Bet250.OnInteract += Empty;
-            HitBtn.OnInteract += Empty;
-            StandBtn.OnInteract += Empty;
-            BlackjackBtn.OnInteract += Empty;
+            Bet1.OnInteract = Empty;
+            Bet10.OnInteract = Empty;
+            Bet100.OnInteract = Empty;
+            Bet250.OnInteract = Empty;
+            HitBtn.OnInteract = Empty;
+            StandBtn.OnInteract = Empty;
+            BlackjackBtn.OnInteract = Empty;
             GetComponent<KMBombModule>().HandleStrike();
             ListButtons.Clear();
             foreach (Transform child in Buttons.transform)
@@ -1001,7 +1019,6 @@ public class BlackJackScript : MonoBehaviour
             StartCoroutine("ResultNoBj");
             HittingAllowed = false;
             StandingAllowed = false;
-            Start();
         }
         return false;
     }
@@ -1122,6 +1139,10 @@ public class BlackJackScript : MonoBehaviour
                 {
                 }
             }
+            else
+            {
+                HitCardCont();
+            }
 
         }
         else
@@ -1130,120 +1151,122 @@ public class BlackJackScript : MonoBehaviour
         
         GetComponent<KMSelectable>().AddInteractionPunch();
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-        HitCardCont();
         return false;
     }
 
     void HitCardCont() //Script somehow won't read the entire thing if it's too long. Oh well.
     {
-        if (DealingOrder == 5)
+        if (HittingAllowed == true && DealCard == true)
         {
-            if (isCard1Dealt == false)
+            if (DealingOrder == 5)
             {
-                HitCard1.material.mainTexture = FiveOfHearts;
-                totalSum = totalSum + 5;
-                isCard1Dealt = true;
-                Hits = 1;
-                DealCard2.PlaySoundAtTransform("DealCard2", transform);
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
+                if (isCard1Dealt == false)
+                {
+                    HitCard1.material.mainTexture = FiveOfHearts;
+                    totalSum = totalSum + 5;
+                    isCard1Dealt = true;
+                    Hits = 1;
+                    DealCard2.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else if (isCard1Dealt == true && isCard2Dealt == false)
+                {
+                    DealCard3.PlaySoundAtTransform("DealCard3", transform);
+                    HitCard2.material.mainTexture = EightOfSpades;
+                    totalSum = totalSum + 8;
+                    isCard2Dealt = true;
+                    Hits = 2;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else
+                {
+                }
             }
-            else if (isCard1Dealt == true && isCard2Dealt == false)
+            else if (DealingOrder == 6)
             {
-                DealCard3.PlaySoundAtTransform("DealCard3", transform);
-                HitCard2.material.mainTexture = EightOfSpades;
-                totalSum = totalSum + 8;
-                isCard2Dealt = true;
-                Hits = 2;
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
+                if (isCard1Dealt == false)
+                {
+                    HitCard1.material.mainTexture = QueenOfHearts;
+                    totalSum = totalSum + 10;
+                    Hits = 1;
+                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                    isCard1Dealt = true;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else if (isCard1Dealt == true && isCard2Dealt == false)
+                {
+                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                    HitCard2.material.mainTexture = AceOfDiamonds;
+                    totalSum = totalSum + 1;
+                    Hits = 2;
+                    isCard2Dealt = true;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else
+                {
+                }
             }
-            else
+            else if (DealingOrder == 7)
             {
+                if (isCard1Dealt == false)
+                {
+                    HitCard1.material.mainTexture = FiveOfDiamonds;
+                    totalSum = totalSum + 5;
+                    Hits = 1;
+                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                    isCard1Dealt = true;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else if (isCard1Dealt == true && isCard2Dealt == false)
+                {
+                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                    HitCard2.material.mainTexture = QueenOfClubs;
+                    totalSum = totalSum + 10;
+                    isCard2Dealt = true;
+                    Hits = 2;
+                    DealCard = false;
+                    StartCoroutine("InputDelay");
+
+                }
+                else
+                {
+                }
             }
-        }
-        else if (DealingOrder == 6)
-        {
-            if (isCard1Dealt == false)
+            else if (DealingOrder == 8)
             {
-                HitCard1.material.mainTexture = QueenOfHearts;
-                totalSum = totalSum + 10;
-                Hits = 1;
-                Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                isCard1Dealt = true;
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
-            }
-            else if (isCard1Dealt == true && isCard2Dealt == false)
-            {
-                Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                HitCard2.material.mainTexture = AceOfDiamonds;
-                totalSum = totalSum + 1;
-                Hits = 2;
-                isCard2Dealt = true;
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
-            }
-            else
-            {
-            }
-        }
-        else if (DealingOrder == 7)
-        {
-            if (isCard1Dealt == false)
-            {
-                HitCard1.material.mainTexture = FiveOfDiamonds;
-                totalSum = totalSum + 5;
-                Hits = 1;
-                Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                isCard1Dealt = true;
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
-            }
-            else if (isCard1Dealt == true && isCard2Dealt == false)
-            {
-                Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                HitCard2.material.mainTexture = QueenOfClubs;
-                totalSum = totalSum + 10;
-                isCard2Dealt = true;
-                Hits = 2;
-                DealCard = false;
-                StartCoroutine("InputDelay");
-                
-            }
-            else
-            {
-            }
-        }
-        else if (DealingOrder == 8)
-        {
-            if (isCard1Dealt == false)
-            {
-                HitCard1.material.mainTexture = NineOfClubs;
-                totalSum = totalSum + 9;
-                Hits = 1;
-                isCard1Dealt = true;
-                Shuffle.PlaySoundAtTransform("DealCard2", transform);
-                DealCard = false;
-                
-            }
-            else if (isCard1Dealt == true && isCard2Dealt == false)
-            {
-                Shuffle.PlaySoundAtTransform("DealCard3", transform);
-                HitCard2.material.mainTexture = AceOfSpades;
-                totalSum = totalSum + 1;
-                isCard2Dealt = true;
-                Hits = 2;
-                DealCard = false;
-                
-            }
-            else
-            {
+                if (isCard1Dealt == false)
+                {
+                    HitCard1.material.mainTexture = NineOfClubs;
+                    totalSum = totalSum + 9;
+                    Hits = 1;
+                    isCard1Dealt = true;
+                    Shuffle.PlaySoundAtTransform("DealCard2", transform);
+                    DealCard = false;
+
+                }
+                else if (isCard1Dealt == true && isCard2Dealt == false)
+                {
+                    Shuffle.PlaySoundAtTransform("DealCard3", transform);
+                    HitCard2.material.mainTexture = AceOfSpades;
+                    totalSum = totalSum + 1;
+                    isCard2Dealt = true;
+                    Hits = 2;
+                    DealCard = false;
+
+                }
+                else
+                {
+                }
             }
         }
         if (totalSum > 21)
@@ -1358,8 +1381,8 @@ public class BlackJackScript : MonoBehaviour
             }
             else
             {
-                DealerCard2.material.mainTexture = QueenOfDiamonds;
-                DealerCard3.material.mainTexture = ThreeOfDiamonds;
+                DealerCard1.material.mainTexture = QueenOfDiamonds;
+                DealerCard2.material.mainTexture = ThreeOfDiamonds;
                 DealerCard3.material.mainTexture = SixOfSpades;
                 totalSumDealer = 19;
             }
@@ -1382,8 +1405,8 @@ public class BlackJackScript : MonoBehaviour
             }
             else
             {
-                DealerCard2.material.mainTexture = NineOfClubs;
-                DealerCard3.material.mainTexture = SevenOfHearts;
+                DealerCard1.material.mainTexture = NineOfClubs;
+                DealerCard2.material.mainTexture = SevenOfHearts;
                 DealerCard3.material.mainTexture = ThreeOfSpades;
                 totalSumDealer = 19;
             }
@@ -1430,8 +1453,8 @@ public class BlackJackScript : MonoBehaviour
             }
             else
             {
-                DealerCard2.material.mainTexture = FourOfClubs;
-                DealerCard3.material.mainTexture = KingOfSpades;
+                DealerCard1.material.mainTexture = FourOfClubs;
+                DealerCard2.material.mainTexture = KingOfSpades;
                 DealerCard3.material.mainTexture = TwoOfDiamonds;
                 totalSumDealer = 16;
             }
@@ -1454,8 +1477,8 @@ public class BlackJackScript : MonoBehaviour
             }
             else
             {
-                DealerCard2.material.mainTexture = SevenOfHearts;
-                DealerCard3.material.mainTexture = NineOfClubs;
+                DealerCard1.material.mainTexture = SevenOfHearts;
+                DealerCard2.material.mainTexture = NineOfClubs;
                 DealerCard3.material.mainTexture = FiveOfHearts;
                 totalSumDealer = 21;
             }
@@ -1471,15 +1494,15 @@ public class BlackJackScript : MonoBehaviour
             }
             else if (isCard1Dealt == true && isCard2Dealt == false)
             {
-                DealerCard2.material.mainTexture = AceOfSpades;
-                DealerCard3.material.mainTexture = ThreeOfHearts;
+                DealerCard1.material.mainTexture = AceOfSpades;
+                DealerCard2.material.mainTexture = ThreeOfHearts;
                 DealerCard3.material.mainTexture = KingOfSpades;
                 totalSumDealer = 14;
             }
             else
             {
-                DealerCard3.material.mainTexture = ThreeOfHearts;
-                DealerCard3.material.mainTexture = KingOfSpades;
+                DealerCard1.material.mainTexture = ThreeOfHearts;
+                DealerCard2.material.mainTexture = KingOfSpades;
                 DealerCard3.material.mainTexture = SixOfSpades;
                 totalSumDealer = 19;
             }
@@ -1596,7 +1619,6 @@ public class BlackJackScript : MonoBehaviour
                 StartCoroutine("ResultLost");
                 HittingAllowed = false;
                 StandingAllowed = false;
-                Start();
             }
             else if (totalSum == totalSumDealer)
             {
@@ -1767,6 +1789,8 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 0)
             {
+                HitText.color = Color.grey;
+                StandText.color = Color.grey;
                 ListButtons.Clear();
                 ShowClosedCard();
                 /*foreach (Transform child in EmptyBtns.transform)
