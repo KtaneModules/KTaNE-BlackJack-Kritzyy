@@ -13,6 +13,12 @@ public class BlackJackScript : MonoBehaviour
     public KMSelectable Bet250;
     public KMSelectable BlackjackBtn;
 
+    GameObject Bet1Obj;
+    GameObject Bet10Obj;
+    GameObject Bet100Obj;
+    public GameObject Bet250Obj;
+    public GameObject BlackjackBtnObj;
+
     public GameObject Buttons, LockedButtons, BjBtn, EmptyBtns;
     public KMSelectable ModuleSelectable;
     public KMBombModule BombModule;
@@ -143,16 +149,7 @@ public class BlackJackScript : MonoBehaviour
         HitBtn.OnInteract = HitCard;
         StandBtn.OnInteract = Stand;
         BlackjackBtn.OnInteract += BlackjackCheck;
-        foreach (Transform child in Buttons.transform)
-        {
-            GameObject Lol = child.gameObject;
-            ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-        }
-        foreach (Transform child in BjBtn.transform)
-        {
-            GameObject Lol = child.gameObject;
-            ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-        }
+        Bet1Obj.GetComponent<KMSelectable>().enabled = true;
         ModuleSelectable.Children = ListButtons.ToArray();
         ModuleSelectable.UpdateChildren();
         StartingCardGen = 0;
@@ -365,7 +362,6 @@ public class BlackJackScript : MonoBehaviour
                 ClosedCardValue = 1;
                 Debug.LogFormat("[Blackjack #{0}] Your closed card is the Ace Of Spades with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "AceOfSpades";
-                BlackjackAtStart = true;
             }
         } //Ten Of Clubs
 
@@ -633,10 +629,10 @@ public class BlackJackScript : MonoBehaviour
                 }
                 else
                 {
-                    ExtraCard.material.mainTexture = FiveOfDiamonds;
-                    totalSum = totalSum + 5;
-                    DealingValue = 5;
-                    Debug.LogFormat("[Blackjack #{0}] Your extra card is the Five Of Diamonds", moduleId);
+                    ExtraCard.material.mainTexture = SixOfDiamonds;
+                    totalSum = totalSum + 6;
+                    DealingValue = 6;
+                    Debug.LogFormat("[Blackjack #{0}] Your extra card is the Six Of Diamonds", moduleId);
                 }
             } // Diamonds       
             else
@@ -1416,16 +1412,16 @@ public class BlackJackScript : MonoBehaviour
             if (isCard1Dealt == false)
             {
                 DealerCard1.material.mainTexture = FiveOfHearts;
-                DealerCard2.material.mainTexture = EightOfSpades;
+                DealerCard2.material.mainTexture = SixOfSpades;
                 DealerCard3.material.mainTexture = FiveOfDiamonds;
-                totalSumDealer = 18;
+                totalSumDealer = 16;
             }
             else if (isCard1Dealt == true && isCard2Dealt == false)
             {
-                DealerCard1.material.mainTexture = FiveOfSpades;
+                DealerCard1.material.mainTexture = SixOfSpades;
                 DealerCard2.material.mainTexture = FiveOfDiamonds;
                 DealerCard3.material.mainTexture = FourOfClubs;
-                totalSumDealer = 14;
+                totalSumDealer = 15;
             }
             else
             {
@@ -1503,7 +1499,7 @@ public class BlackJackScript : MonoBehaviour
             {
                 DealerCard1.material.mainTexture = ThreeOfHearts;
                 DealerCard2.material.mainTexture = KingOfSpades;
-                DealerCard3.material.mainTexture = SixOfSpades;
+                DealerCard3.material.mainTexture = SixOfDiamonds;
                 totalSumDealer = 19;
             }
         }
