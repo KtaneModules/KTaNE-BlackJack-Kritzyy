@@ -1379,8 +1379,8 @@ public class BlackJackScript : MonoBehaviour
             {
                 DealerCard1.material.mainTexture = QueenOfDiamonds;
                 DealerCard2.material.mainTexture = ThreeOfDiamonds;
-                DealerCard3.material.mainTexture = SixOfSpades;
-                totalSumDealer = 19;
+                DealerCard3.material.mainTexture = KingOfSpades;
+                totalSumDealer = 23;
             }
         }
         else if (DealingOrder == 4)
