@@ -13,16 +13,15 @@ public class BlackJackScript : MonoBehaviour
     public KMSelectable Bet250;
     public KMSelectable BlackjackBtn;
 
-    GameObject Bet1Obj;
-    GameObject Bet10Obj;
-    GameObject Bet100Obj;
+    public GameObject Bet1Obj;
+    public GameObject Bet10Obj;
+    public GameObject Bet100Obj;
     public GameObject Bet250Obj;
     public GameObject BlackjackBtnObj;
+    public GameObject HitObj, StandObj;
 
     public GameObject Buttons, LockedButtons, BjBtn, EmptyBtns;
-    public KMSelectable ModuleSelectable;
     public KMBombModule BombModule;
-    List<KMSelectable> ListButtons = new List<KMSelectable>();
 
 
     public KMSelectable HitBtn;
@@ -149,9 +148,6 @@ public class BlackJackScript : MonoBehaviour
         HitBtn.OnInteract = HitCard;
         StandBtn.OnInteract = Stand;
         BlackjackBtn.OnInteract += BlackjackCheck;
-        Bet1Obj.GetComponent<KMSelectable>().enabled = true;
-        ModuleSelectable.Children = ListButtons.ToArray();
-        ModuleSelectable.UpdateChildren();
         StartingCardGen = 0;
         Suit = 0;
         DealtCard = 0;
@@ -168,6 +164,14 @@ public class BlackJackScript : MonoBehaviour
         isCard2Dealt = false;
         BlackjackMessage = false;
         BetWorth.text = "";
+
+        Bet1Obj.SetActive(true);
+        Bet10Obj.SetActive(true);
+        Bet100Obj.SetActive(true);
+        Bet250Obj.SetActive(true);
+        HitObj.SetActive(false);
+        StandObj.SetActive(false);
+        BlackjackBtnObj.SetActive(true);
 
         HitText.color = Color.grey;
         StandText.color = Color.grey;
@@ -747,14 +751,12 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 0)
             {
-                ListButtons.Clear();
-                /*foreach (Transform child in EmptyBtns.transform)
-                {
-                    GameObject Lol = child.gameObject;
-                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-                } */
-                ModuleSelectable.Children = ListButtons.ToArray();
-                ModuleSelectable.UpdateChildren();
+                Bet1Obj.SetActive(false);
+                Bet10Obj.SetActive(false);
+                Bet100Obj.SetActive(false);
+                Bet250Obj.SetActive(false);
+                HitObj.SetActive(false);
+                StandObj.SetActive(false);
                 MainCard.material.mainTexture = mainCard;
                 CardClosedRender.material.mainTexture = mainCard;
                 ExtraCard.material.mainTexture = mainCard;
@@ -839,9 +841,7 @@ public class BlackJackScript : MonoBehaviour
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             BlackjackBtn.OnInteract = Empty;
             Response.text = "Betting Complete";
-            ListButtons.Clear();
-            ModuleSelectable.Children = ListButtons.ToArray();
-            ModuleSelectable.UpdateChildren();
+            //
             StartCoroutine("HitOrStand");
             HittingAllowed = true;
             StandingAllowed = true;
@@ -877,9 +877,7 @@ public class BlackJackScript : MonoBehaviour
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
             BlackjackBtn.OnInteract = Empty;
-            ListButtons.Clear();
-            ModuleSelectable.Children = ListButtons.ToArray();
-            ModuleSelectable.UpdateChildren();
+            //
             StartCoroutine("HitOrStand");
             HittingAllowed = true;
             StandingAllowed = true;
@@ -915,9 +913,7 @@ public class BlackJackScript : MonoBehaviour
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
             BlackjackBtn.OnInteract = Empty;
-            ListButtons.Clear();
-            ModuleSelectable.Children = ListButtons.ToArray();
-            ModuleSelectable.UpdateChildren();
+            //
             StartCoroutine("HitOrStand");
             BettingComplete = true;
             HittingAllowed = true;
@@ -953,9 +949,7 @@ public class BlackJackScript : MonoBehaviour
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
             BlackjackBtn.OnInteract = Empty;
-            ListButtons.Clear();
-            ModuleSelectable.Children = ListButtons.ToArray();
-            ModuleSelectable.UpdateChildren();
+            //
             StartCoroutine("HitOrStand");
             BettingComplete = true;
             HittingAllowed = true;
@@ -1003,14 +997,13 @@ public class BlackJackScript : MonoBehaviour
             StandBtn.OnInteract = Empty;
             BlackjackBtn.OnInteract = Empty;
             GetComponent<KMBombModule>().HandleStrike();
-            ListButtons.Clear();
-            foreach (Transform child in Buttons.transform)
-            {
-                GameObject Lol = child.gameObject;
-                ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-            }
-            ModuleSelectable.Children = ListButtons.ToArray();
-            ModuleSelectable.UpdateChildren();
+            Bet1Obj.SetActive(false);
+            Bet10Obj.SetActive(false);
+            Bet100Obj.SetActive(false);
+            Bet250Obj.SetActive(false);
+            HitObj.SetActive(false);
+            StandObj.SetActive(false);
+            BlackjackBtnObj.SetActive(false);
             Debug.LogFormat("[Blackjack #{0}] You don't have blackjack! Strike handed.", moduleId);
             StartCoroutine("ResultNoBj");
             HittingAllowed = false;
@@ -1112,8 +1105,8 @@ public class BlackJackScript : MonoBehaviour
             {
                 if (isCard1Dealt == false)
                 {
-                    HitCard1.material.mainTexture = TwoOfDiamonds;
-                    totalSum = totalSum + 10;
+                    HitCard1.material.mainTexture = AceOfDiamonds;
+                    totalSum = totalSum + 1;
                     isCard1Dealt = true;
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
@@ -1387,10 +1380,10 @@ public class BlackJackScript : MonoBehaviour
         {
             if (isCard1Dealt == false)
             {
-                DealerCard1.material.mainTexture = TwoOfDiamonds;
+                DealerCard1.material.mainTexture = AceOfDiamonds;
                 DealerCard2.material.mainTexture = JackOfSpades;
                 DealerCard3.material.mainTexture = NineOfClubs;
-                totalSumDealer = 21;
+                totalSumDealer = 20;
             }
             else if (isCard1Dealt == true && isCard2Dealt == false)
             {
@@ -1632,30 +1625,19 @@ public class BlackJackScript : MonoBehaviour
 
     void UpdateSelectable()
     {
-        foreach (Transform child in Buttons.transform)
-        {
-            GameObject Lol = child.gameObject;
-            ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-        }
-        foreach (Transform child in LockedButtons.transform)
-        {
-            GameObject Lol = child.gameObject;
-            ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-        }
-        HitBtn.OnInteract += HitCard;
-        StandBtn.OnInteract += Stand;
-
-        ModuleSelectable.Children = ListButtons.ToArray();
-        ModuleSelectable.UpdateChildren();
+        HitObj.SetActive(true);
+        StandObj.SetActive(true);
+        BlackjackBtnObj.SetActive(false);
     }
 
     void RestartSelectable()
     {
-        ListButtons.Remove(HitBtn);
-        ListButtons.Remove(StandBtn);
-
-        ModuleSelectable.Children = ListButtons.ToArray();
-        ModuleSelectable.UpdateChildren();
+        Bet1Obj.SetActive(false);
+        Bet10Obj.SetActive(false);
+        Bet100Obj.SetActive(false);
+        Bet250Obj.SetActive(false);
+        HitObj.SetActive(false);
+        StandObj.SetActive(false);
         return;
     }
 
@@ -1787,15 +1769,13 @@ public class BlackJackScript : MonoBehaviour
             {
                 HitText.color = Color.grey;
                 StandText.color = Color.grey;
-                ListButtons.Clear();
                 ShowClosedCard();
-                /*foreach (Transform child in EmptyBtns.transform)
-                {
-                    GameObject Lol = child.gameObject;
-                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-                } */
-                ModuleSelectable.Children = ListButtons.ToArray();
-                ModuleSelectable.UpdateChildren();
+                Bet1Obj.SetActive(false);
+                Bet10Obj.SetActive(false);
+                Bet100Obj.SetActive(false);
+                Bet250Obj.SetActive(false);
+                HitObj.SetActive(false);
+                StandObj.SetActive(false);
                 HingeHit.gameObject.transform.Rotate(0, 0, 270);
                 HingeStand.gameObject.transform.Rotate(0, 0, 270);
                 Response.text = "Dealer won!";
@@ -1845,14 +1825,12 @@ public class BlackJackScript : MonoBehaviour
             timer = i;
             if (timer == 0)
             {
-                ListButtons.Clear();
-                /*foreach (Transform child in EmptyBtns.transform)
-                {
-                    GameObject Lol = child.gameObject;
-                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-                } */
-                ModuleSelectable.Children = ListButtons.ToArray();
-                ModuleSelectable.UpdateChildren();
+                Bet1Obj.SetActive(false);
+                Bet10Obj.SetActive(false);
+                Bet100Obj.SetActive(false);
+                Bet250Obj.SetActive(false);
+                HitObj.SetActive(false);
+                StandObj.SetActive(false);
                 ShowClosedCard();
             }
             if (timer == 1)
@@ -1884,13 +1862,6 @@ public class BlackJackScript : MonoBehaviour
             }
             if (timer == 4)
             {
-                foreach (Transform child in BjBtn.transform)
-                {
-                    GameObject Lol = child.gameObject;
-                    ListButtons.Add(Lol.activeSelf ? Lol.GetComponent<KMSelectable>() : null);
-                }
-                ModuleSelectable.Children = ListButtons.ToArray();
-                ModuleSelectable.UpdateChildren();
                 Start();
             }
             yield return new WaitForSecondsRealtime(1);
