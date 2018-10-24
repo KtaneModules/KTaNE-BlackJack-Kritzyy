@@ -1031,6 +1031,7 @@ public class BlackJackScript : MonoBehaviour
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
                     DealCard = false;
+                    StartCoroutine("InputDelay");
                     return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
@@ -1041,6 +1042,7 @@ public class BlackJackScript : MonoBehaviour
                     isCard2Dealt = true;
                     Hits = 2;
                     DealCard = false;
+                    StartCoroutine("InputDelay");
                     return false;
                 }
                 else
@@ -1057,6 +1059,7 @@ public class BlackJackScript : MonoBehaviour
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
                     DealCard = false;
+                    StartCoroutine("InputDelay");
                     return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
@@ -1066,7 +1069,7 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 7;
                     isCard2Dealt = true;
                     Hits = 2;
-                    DealCard = false;
+                 StartCoroutine("InputDelay");
                     return false;
                 }
                 else
@@ -1111,6 +1114,7 @@ public class BlackJackScript : MonoBehaviour
                     Hits = 1;
                     DealCard2.PlaySoundAtTransform("DealCard2", transform);
                     DealCard = false;
+                    StartCoroutine("InputDelay");
                     return false;
                 }
                 else if (isCard1Dealt == true && isCard2Dealt == false)
@@ -1120,6 +1124,7 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 10;
                     isCard2Dealt = false;
                     Hits = 2;
+                    StartCoroutine("InputDelay");
                     DealCard = false;
                     return false;
 
@@ -1239,6 +1244,7 @@ public class BlackJackScript : MonoBehaviour
                     totalSum = totalSum + 9;
                     Hits = 1;
                     isCard1Dealt = true;
+                    StartCoroutine("InputDelay");
                     Shuffle.PlaySoundAtTransform("DealCard2", transform);
                     DealCard = false;
 
@@ -1247,6 +1253,7 @@ public class BlackJackScript : MonoBehaviour
                 {
                     Shuffle.PlaySoundAtTransform("DealCard3", transform);
                     HitCard2.material.mainTexture = AceOfSpades;
+                    StartCoroutine("InputDelay");
                     totalSum = totalSum + 1;
                     isCard2Dealt = true;
                     Hits = 2;
@@ -1268,7 +1275,6 @@ public class BlackJackScript : MonoBehaviour
             }
         }
         LogHit();
-        StartCoroutine("InputDelay");
     }
 
     void LogHit()
