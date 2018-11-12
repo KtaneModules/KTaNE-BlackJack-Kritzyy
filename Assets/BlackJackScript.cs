@@ -1168,8 +1168,8 @@ public class BlackJackScript : MonoBehaviour
                 else if (isCard1Dealt == true && isCard2Dealt == false)
                 {
                     DealCard3.PlaySoundAtTransform("DealCard3", transform);
-                    HitCard2.material.mainTexture = EightOfSpades;
-                    totalSum = totalSum + 8;
+                    HitCard2.material.mainTexture = SixOfSpades;
+                    totalSum = totalSum + 6;
                     isCard2Dealt = true;
                     Hits = 2;
                     DealCard = false;
