@@ -1,13 +1,13 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<!DOCTYPE html>
+<!-- saved from url=(0044)https://ktane.timwi.de/HTML/Blackjack.html#1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
     <title>Blackjack — Keep Talking and Nobody Explodes Module</title>
     <meta name="viewport" content="initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/normalize.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <link rel="stylesheet" type="text/css" href="css/font.css">
-    <script src="js/highlighter.js"></script>
+    <link rel="stylesheet" type="text/css" href="./Manual_files/normalize.css">
+    <link rel="stylesheet" type="text/css" href="./Manual_files/main.css">
+    <link rel="stylesheet" type="text/css" href="./Manual_files/font.css">
+    <script src="./Manual_files/ktane-utils.js.download"></script><script src="./Manual_files/jquery.3.1.1.min.js.download"></script>
     <style>
         h4 {
             margin: .2em;
@@ -29,7 +29,7 @@
                 <span class="page-header-section-title">Blackjack</span>
             </div>
             <div class="page-content">
-                <img src="img/Component/Blackjack.svg" class="diagram">
+                <img src="./Manual_files/Blackjack.svg" class="diagram">
                 <h2>On the Subject of Blackjack</h2>
                 <p class="flavour-text">I should start a Casino one day...</p>
 
@@ -49,7 +49,7 @@
 				</ul>
 
                 <h3>Section A: Closed Card</h3>
-                <table class='bordered'><tr><td>
+                <table class="bordered"><tbody><tr><td>
                 <h4>If your starting card is an Ace...</h4>
                 <ul>
                     <li>If there is a lit BOB present, then your closed card is the King of Hearts.</li>
@@ -65,7 +65,7 @@
                     <li>Otherwise, if a Serial port is present, then the closed card is a Three of Diamonds.</li>
                     <li>Otherwise, your card is a Four of Clubs.</li>
                 </ul>
-                </td></tr></table>
+                </td></tr></tbody></table>
             </div>
             <div class="page-footer relative-footer">Page 1 of 2</div>
         </div>
@@ -75,7 +75,7 @@
                 <span class="page-header-section-title">Blackjack</span>
             </div>
             <div class="page-content">
-                <table class='bordered'><tr><td>
+                <table class="bordered"><tbody><tr><td>
                 <h4>If your starting card is a Two...</h4>
                 <ul>
                     <li>If there are more ports than batteries, the closed card is an Ace of Diamonds.</li>
@@ -87,34 +87,52 @@
                 <h4>If your starting card is a Ten...</h4>
                 <ul>
                     <li>If the serial number contains a letter that is also in the word “Casino”, the card is a Five of Clubs.</li>
-                    <li>Otherwise, if there is more than 3 AA Batteries, then the card is a Three of Hearts.</li>
+                    <li>Otherwise, if there are more than 3 AA batteries present, then the card is a Three of Hearts.</li>
                     <li>Otherwise, if a Parallel port is present, the closed card is a Six of Diamonds.</li>
                     <li>Otherwise, the card is an Ace of Spades.</li>
                 </ul>
-                </td></tr></table>
+                </td></tr></tbody></table>
                 <h3>Section B: Card Combinations</h3>
                 <table>
-                    <tr><th colspan="4">Starting Card</th></tr>
+                    <tbody><tr><th colspan="4">Starting Card</th></tr>
                     <tr><th>Ace Of Spades</th><th>King Of Diamonds</th><th>Two Of Hearts</th><th>Ten Of Clubs</th></tr>
                     <tr><td>Bet $250</td><td>Bet $100</td><td>Bet $1</td><td>Bet $10</td><th>Spades</th><th rowspan="4">Closed Card</th></tr>
                     <tr><td>Bet $100</td><td>Bet $250</td><td>Bet $10</td><td>Bet $1</td><th>Hearts</th></tr>
                     <tr><td>Bet $10</td><td>Bet $1</td><td>Bet $250</td><td>Bet $100</td><th>Clubs</th></tr>
                     <tr><td>Bet $1</td><td>Bet $10</td><td>Bet $100</td><td>Bet $250</td><th>Diamonds</th></tr>
-                </table>
+                </tbody></table>
 
                 <h3>Section C: Dealing order</h3>
                 <table style="text-align: center">
-                    <tr><th colspan="4">Extra card lower than 4?</th><th colspan="4">Extra card 4 or higher?</th></tr>
+                    <tbody><tr><th colspan="4">Extra card lower than 4?</th><th colspan="4">Extra card 4 or higher?</th></tr>
                     <tr><th>Bet $1</th><th>Bet $10</th><th>Bet $100</th><th>Bet $250</th><th>Bet $1</th><th>Bet $10</th><th>Bet $100</th><th>Bet $250</th></tr>
                     <tr><td>2♠</td><td>6♦</td><td>3♣</td><td>A♦</td><td>5♥</td><td>Q♥</td><td>5♦</td><td>9♣</td></tr>
                     <tr><td>8♦</td><td>7♣</td><td>5♥</td><td>J♠</td><td>6♠</td><td>A♦</td><td>Q♣</td><td>A♠</td></tr>
                     <tr><td>7♥</td><td>2♣</td><td>Q♦</td><td>9♣</td><td>5♦</td><td>4♣</td><td>7♥</td><td>3♥</td></tr>
                     <tr><td>9♠</td><td>8♣</td><td>3♦</td><td>7♥</td><td>4♣</td><td>K♠</td><td>9♣</td><td>K♠</td></tr>
                     <tr><td>4♦</td><td>6♠</td><td>K♠</td><td>3♠</td><td>J♥</td><td>2♦</td><td>5♥</td><td>6♦</td></tr>
-                </table>
+                </tbody></table>
             </div>
             <div class="page-footer relative-footer">Page 2 of 2</div>
         </div>
     </div>
-</body>
-</html>
+
+<div id="notification" style="display: none;"></div><div id="optionsMenu">
+            <h2>Options (Alt-O)</h2>
+            <div class="option-group">
+                <h3>Highlighter</h3>
+                <div><input type="checkbox" id="highlighter-enabled">&nbsp;<label for="highlighter-enabled" accesskey="h">Enabled</label> (Alt-H)</div>
+                <div>Color:</div>
+                <blockquote>
+                    <div><input type="radio" name="highlighter-color" class="highlighter-color" id="highlighter-color-blue" data-color="0" checked="">&nbsp;<label for="highlighter-color-blue" accesskey="1">Blue</label> (Alt-1)</div>
+                    <div><input type="radio" name="highlighter-color" class="highlighter-color" id="highlighter-color-red" data-color="1">&nbsp;<label for="highlighter-color-red" accesskey="2">Red</label> (Alt-2)</div>
+                    <div><input type="radio" name="highlighter-color" class="highlighter-color" id="highlighter-color-green" data-color="2">&nbsp;<label for="highlighter-color-green" accesskey="3">Green</label> (Alt-3)</div>
+                    <div><input type="radio" name="highlighter-color" class="highlighter-color" id="highlighter-color-yellow" data-color="3">&nbsp;<label for="highlighter-color-yellow" accesskey="4">Yellow</label> (Alt-4)</div>
+                </blockquote>
+            </div>
+            <div class="option-group">
+                <h3>Page layout</h3>
+                <div><input type="radio" name="page-layout" class="page-layout" id="page-layout-vertical">&nbsp;<label for="page-layout-vertical" accesskey="v"><kbd>V</kbd>ertical</label></div>
+                <div><input type="radio" name="page-layout" class="page-layout" id="page-layout-side-by-side">&nbsp;<label for="page-layout-side-by-side" accesskey="s"><kbd>S</kbd>ide by side</label></div>
+            </div>
+        </div></body></html>
