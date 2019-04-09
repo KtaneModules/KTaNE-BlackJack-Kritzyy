@@ -343,7 +343,7 @@ public class BlackJackScript : MonoBehaviour
                 Debug.LogFormat("[Blackjack #{0}] Your closed card is the Five Of Clubs with a value of {1}", moduleId, ClosedCardValue);
                 ClosedCard = "FiveOfClubs";
             }
-            else if (BombInfo.GetBatteryCount(Battery.AA) + BombInfo.GetBatteryCount(Battery.AAx3) + BombInfo.GetBatteryCount(Battery.AAx4) > 3)
+            else if ((BombInfo.GetBatteryCount(Battery.AA) + BombInfo.GetBatteryCount(Battery.AAx3) + BombInfo.GetBatteryCount(Battery.AAx4)) > 3)
             {
                 totalSum = totalSum + 3;
                 CorrectBet = 1;
@@ -949,7 +949,6 @@ public class BlackJackScript : MonoBehaviour
             HingeStand.gameObject.transform.Rotate(0, 0, 90);
             Response.text = "Betting Complete";
             BlackjackBtn.OnInteract = Empty;
-            //
             StartCoroutine("HitOrStand");
             BettingComplete = true;
             HittingAllowed = true;
