@@ -805,7 +805,7 @@ public class BlackJackScript : MonoBehaviour
                 {
                     Debug.LogFormat("[Blackjack #{0}] Busted!", moduleId);
                     Over21();
-                    StopCoroutine("CheckForOver21");
+                    break;
                 }
             }
             yield return new WaitForSecondsRealtime(0.1f);
